@@ -10,6 +10,8 @@ function Get-AutomateComputerPatchPolicy {
     )
     
     begin {
+        if (! $global:CWAServer) {Write-Error '$global:CWAServer not present!'}
+
         #Build the URL to hit
         $rawUri = ($global:CWAServer + '/cwa/api/v1/computers/')
 
