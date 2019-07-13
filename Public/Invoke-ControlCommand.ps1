@@ -67,7 +67,7 @@ function Invoke-ControlCommand {
 
     Begin {
 
-        $Server = $Script:ControlServer -replace '/$', ''
+        $Server = $global:ControlServer -replace '/$', ''
 
         # Format command
         $FormattedCommand = @()
@@ -80,11 +80,11 @@ function Invoke-ControlCommand {
         $FormattedCommand = $FormattedCommand | Out-String
         $SessionEventType = 44
 
-        If ($Script:ControlAPIKey) {
+        If ($global:ControlAPIKey) {
             $User = 'AutomateAPI'
         }
-        ElseIf ($Script:ControlAPICredentials.UserName) {
-            $User = $Script:ControlAPICredentials.UserName
+        ElseIf ($global:ControlAPICredentials.UserName) {
+            $User = $global:ControlAPICredentials.UserName
         }
         Else {
             $User = ''
@@ -136,10 +136,10 @@ function Invoke-ControlCommand {
                 'ContentType' = 'application/json'
                 'Body'        = $Body
             }
-            If ($Script:ControlAPIKey) {
+            If ($global:ControlAPIKey) {
                 $RESTRequest.Add('Headers', @{'CWAIKToken' = (Get-CWAIKToken)})
             } Else {
-                $RESTRequest.Add('Credential', $Script:ControlAPICredentials)
+                $RESTRequest.Add('Credential', $global:ControlAPICredentials)
             }
 
             # Issue command
@@ -171,10 +171,10 @@ function Invoke-ControlCommand {
                     'Body'        = $Body
                 }
 
-                If ($Script:ControlAPIKey) {
+                If ($global:ControlAPIKey) {
                     $RESTRequest.Add('Headers', @{'CWAIKToken' = (Get-CWAIKToken)})
                 } Else {
-                    $RESTRequest.Add('Credential', $Script:ControlAPICredentials)
+                    $RESTRequest.Add('Credential', $global:ControlAPICredentials)
                 }
 
                 Try {

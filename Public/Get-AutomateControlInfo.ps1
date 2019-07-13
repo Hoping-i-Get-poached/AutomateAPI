@@ -65,9 +65,9 @@ Get-AutomateControlInfo -ComputerId 123
             If ($PSCmdlet.ParameterSetName -eq 'pipeline') {
                 $Null = $Computer | Add-Member -NotePropertyName 'SessionID' -NotePropertyValue 'Not Found'
             }
-            $url = ($Script:CWAServer + "/cwa/api/v1/extensionactions/control/$($Computer.ID)")
+            $url = ($global:CWAServer + "/cwa/api/v1/extensionactions/control/$($Computer.ID)")
             Try {
-                $Result = Invoke-RestMethod -Uri $url -Headers $script:CWAToken -ContentType "application/json"
+                $Result = Invoke-RestMethod -Uri $url -Headers $global:CWAToken -ContentType "application/json"
 
                 $ResultMatch=$Result|select-string -Pattern '^(https?://[^?]*)\??(.*)' -AllMatches
                 If ($ResultMatch.Matches) {

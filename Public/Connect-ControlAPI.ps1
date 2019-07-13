@@ -47,10 +47,10 @@ function Connect-ControlAPI {
 
         [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
         [Parameter(ParameterSetName = 'apikey', Mandatory = $False)]
-        [String]$Server = $Script:ControlServer,
+        [String]$Server = $global:ControlServer,
 
         [Parameter(ParameterSetName = 'apikey', Mandatory = $False)]
-        $APIKey = ([SecureString]$Script:ControlAPIKey),
+        $APIKey = ([SecureString]$global:ControlAPIKey),
         
         [Parameter(ParameterSetName = 'verify', Mandatory = $false)]
         [Switch]$Verify, 
@@ -114,7 +114,7 @@ function Connect-ControlAPI {
 
             IF ($PSCmdlet.ParameterSetName -eq 'verify' -and $Null -eq $Credential) {
                 # The Verify parameter will use the current ControlAPICredentials value.
-                $Credential = $Script:ControlAPICredentials
+                $Credential = $global:ControlAPICredentials
             }
             # Clear the ControlAPICredentials variable
             Remove-Variable ControlAPICredentials -Scope Script -ErrorAction 0
@@ -179,15 +179,15 @@ function Connect-ControlAPI {
         Else {
             If ($PSCmdlet.ParameterSetName -eq 'credential' -or ($PSCmdlet.ParameterSetName -eq 'verify' -and $Credential)) {
                 # Set the credentials at the script level
-                $Script:ControlAPICredentials = $Credential
+                $global:ControlAPICredentials = $Credential
             } 
             ElseIf ($PSCmdlet.ParameterSetName -eq 'apikey' -or ($PSCmdlet.ParameterSetName -eq 'verify' -and $APIKey)) {
-                $Script:ControlAPIKey = $APIKey
+                $global:ControlAPIKey = $APIKey
             }
             Else {
                 Throw "Error - No parameter set was recognized."
             }
-            $Script:ControlServer = $Server
+            $global:ControlServer = $Server
             If (!$Quiet) {
                 If (!$SkipCheck) {
                     Write-Host -BackgroundColor Green -ForegroundColor Black "Successfully tested and connected to the Control API. Server version is $($AuthorizationResult)"

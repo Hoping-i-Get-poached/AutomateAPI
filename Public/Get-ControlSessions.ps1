@@ -70,7 +70,7 @@ function Get-ControlSessions {
                 'Body' = $Body
             }
 
-            If ($Script:ControlAPIKey) {
+            If ($global:ControlAPIKey) {
                 $RESTRequest.Add('Headers',@{'CWAIKToken' = (Get-CWAIKToken)})
             } Else {
                 $RESTRequest.Add('Credential',${Script:ControlAPICredentials})

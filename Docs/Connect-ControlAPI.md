@@ -70,7 +70,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: $Script:ControlServer
+Default value: $global:ControlServer
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -85,7 +85,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: ([SecureString]$Script:ControlAPIKey)
+Default value: ([SecureString]$global:ControlAPIKey)
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

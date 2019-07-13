@@ -46,11 +46,11 @@ Connect-AutomateAPI -Quiet
         [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
         [Parameter(ParameterSetName = 'refresh', Mandatory = $False)]
         [Parameter(ParameterSetName = 'verify', Mandatory = $False)]
-        [String]$Server = $Script:CWAServer,
+        [String]$Server = $global:CWAServer,
 
         [Parameter(ParameterSetName = 'refresh', Mandatory = $False)]
         [Parameter(ParameterSetName = 'verify', Mandatory = $False)]
-        [String]$AuthorizationToken = ($Script:CWAToken.Authorization -replace 'Bearer ',''),
+        [String]$AuthorizationToken = ($global:CWAToken.Authorization -replace 'Bearer ',''),
 
         [Parameter(ParameterSetName = 'refresh', Mandatory = $False)]
         [Parameter(ParameterSetName = 'credential', Mandatory = $False)]
@@ -90,17 +90,17 @@ Connect-AutomateAPI -Quiet
     Process {
         If (!($Server -match '^[a-z0-9][a-z0-9\.\-\/]*$')) {Throw "Server address ($Server) is missing or in invalid format."; Return}
         If ($SkipCheck) {
-            $Script:CWAServer = ("https://" + $Server)
+            $global:CWAServer = ("https://" + $Server)
             If ($Credential) {
                 Write-Debug "Setting Credentials to $($Credential.UserName)"
-                $Script:CWAToken = $AutomateToken
+                $global:CWAToken = $AutomateToken
             }
             If ($AuthorizationToken) {
                 #Build the token
                 $AutomateToken = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
                 $Null = $AutomateToken.Add("Authorization", "Bearer $AuthorizationToken")
                 Write-Debug "Setting Authorization Token to $($AutomateToken.Authorization)"
-                $Script:CWAToken = $AutomateToken
+                $global:CWAToken = $AutomateToken
             }
             Return
         }
@@ -117,8 +117,8 @@ Connect-AutomateAPI -Quiet
                     $testCredentials=$Credential
                 }
                 If (!$Credential -and ($Force -or !$AuthorizationToken)) {
-                    If (!$Force -and $Script:CWACredentials) {
-                        $testCredentials = $Script:CWACredentials
+                    If (!$Force -and $global:CWACredentials) {
+                        $testCredentials = $global:CWACredentials
                     } Else {
                         $Username = Read-Host -Prompt "Please enter your Automate Username"
                         $Password = Read-Host -Prompt "Please enter your Automate Password" -AsSecureString
@@ -183,7 +183,7 @@ Connect-AutomateAPI -Quiet
             
             $AuthorizationToken=$AutomateAPITokenResult.Accesstoken
             If ($PSCmdlet.ParameterSetName -eq 'verify' -and !$AuthorizationToken -and $AutomateAPITokenResult) {
-                $AuthorizationToken = $Script:CWAToken.Authorization -replace 'Bearer ',''
+                $AuthorizationToken = $global:CWAToken.Authorization -replace 'Bearer ',''
             }
             $TwoFactorNeeded=$AutomateAPITokenResult.IsTwoFactorRequired
         } Until ($Quiet -or ![string]::IsNullOrEmpty($AuthorizationToken) -or 
@@ -212,20 +212,20 @@ Connect-AutomateAPI -Quiet
             $AutomateToken = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
             $AutomateToken.Add("Authorization", "Bearer $AuthorizationToken")
             #Create Script Variables for this session in order to use the token
-            $Script:CWATokenKey = ConvertTo-SecureString $AuthorizationToken -AsPlainText -Force
-            $Script:CWAServer = ("https://" + $Server)
-            $Script:CWAToken = $AutomateToken
+            $global:CWATokenKey = ConvertTo-SecureString $AuthorizationToken -AsPlainText -Force
+            $global:CWAServer = ("https://" + $Server)
+            $global:CWAToken = $AutomateToken
             If ($Credential) {
-                $Script:CWACredentials = $Credential
+                $global:CWACredentials = $Credential
             }
             If ($PSCmdlet.ParameterSetName -ne 'verify') {
                 $AutomateAPITokenResult.PSObject.properties.remove('AccessToken')
-                $Script:CWATokenInfo = $AutomateAPITokenResult
+                $global:CWATokenInfo = $AutomateAPITokenResult
             }
-            Write-Verbose "Token retrieved: $AuthorizationToken, expiration is $($Script:CWATokenInfo.ExpirationDate)"
+            Write-Verbose "Token retrieved: $AuthorizationToken, expiration is $($global:CWATokenInfo.ExpirationDate)"
 
             If (!$Quiet) {
-                Write-Host -BackgroundColor Green -ForegroundColor Black "Successfully tested and connected to the Automate REST API. Token will expire at $($Script:CWATokenInfo.ExpirationDate)"
+                Write-Host -BackgroundColor Green -ForegroundColor Black "Successfully tested and connected to the Automate REST API. Token will expire at $($global:CWATokenInfo.ExpirationDate)"
             } Else {
                 Return $True
             }

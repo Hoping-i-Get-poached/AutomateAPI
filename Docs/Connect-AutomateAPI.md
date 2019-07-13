@@ -72,7 +72,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: $Script:CWAServer
+Default value: $global:CWAServer
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -87,7 +87,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: ($Script:CWAToken.Authorization -replace 'Bearer ','')
+Default value: ($global:CWAToken.Authorization -replace 'Bearer ','')
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

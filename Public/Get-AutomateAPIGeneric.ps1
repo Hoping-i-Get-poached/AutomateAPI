@@ -84,7 +84,7 @@ function Get-AutomateAPIGeneric {
     
     begin {
         #Build the URL to hit
-        $url = ($Script:CWAServer + '/cwa/api/v1/' + $EndPoint)
+        $url = ($global:CWAServer + '/cwa/api/v1/' + $EndPoint)
 
         #Build the Body Up
         $Body = @{}
@@ -136,7 +136,7 @@ function Get-AutomateAPIGeneric {
                 [int]$i += 1
                 $URLNew = "$($url)?page=$($i)"
                 try {
-                    $return = Invoke-RestMethod -Uri $URLNew -Headers $script:CWAToken -ContentType "application/json" -Body $Body
+                    $return = Invoke-RestMethod -Uri $URLNew -Headers $global:CWAToken -ContentType "application/json" -Body $Body
                 }
                 catch {
                     Write-Error "Failed to perform Invoke-RestMethod to Automate API with error $_.Exception.Message"
@@ -152,7 +152,7 @@ function Get-AutomateAPIGeneric {
             [System.Collections.ArrayList]$ReturnedResults
             $URLNew = "$($url)?page=$($Page)"
             try {
-                $return = Invoke-RestMethod -Uri $URLNew -Headers $script:CWAToken -ContentType "application/json" -Body $Body
+                $return = Invoke-RestMethod -Uri $URLNew -Headers $global:CWAToken -ContentType "application/json" -Body $Body
             }
             catch {
                 Write-Error "Failed to perform Invoke-RestMethod to Automate API with error $_.Exception.Message"

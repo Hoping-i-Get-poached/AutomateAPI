@@ -1,7 +1,7 @@
 function Get-CWAIKToken {
     param (
         [Parameter(Position=0)]
-        $APIKey = ([SecureString]$Script:ControlAPIKey)
+        $APIKey = ([SecureString]$global:ControlAPIKey)
     )
 
     If (!$APIKey) {

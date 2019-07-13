@@ -54,11 +54,11 @@ function Get-CredentialsLocallyStored {
                 $Null = Set-Variable @SaveVar -Value $($StoreBlock.$($SaveVar.Name))
             }
         }
-        If ($Script:CWATokenKey -and $Script:CWATokenKey.GetType() -match 'SecureString') {
-            $AuthorizationToken = $([Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($Script:CWATokenKey)))
+        If ($global:CWATokenKey -and $global:CWATokenKey.GetType() -match 'SecureString') {
+            $AuthorizationToken = $([Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($global:CWATokenKey)))
             $AutomateToken = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
             $AutomateToken.Add("Authorization", "Bearer $AuthorizationToken")
-            $Script:CWAToken = $AutomateToken
+            $global:CWAToken = $AutomateToken
         }
         If (!(Connect-AutomateAPI -Verify -Quiet -ErrorAction 0)) {
             Write-Error "Automate Credentials failed to successfully validate. Call Connect-AutomateAPI to establish a valid session." -ErrorAction 'Continue'

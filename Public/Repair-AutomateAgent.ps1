@@ -34,7 +34,7 @@ function Repair-AutomateAgent {
    $BatchSize = 10,
 
    [Parameter(Mandatory = $False)]
-   [String]$LTPoShURI = $Script:LTPoShURI,
+   [String]$LTPoShURI = $global:LTPoShURI,
 
    [Parameter(ValueFromPipeline = $true)]
    $AutomateControlStatusObject
@@ -44,9 +44,9 @@ function Repair-AutomateAgent {
       $ResultArray = @()
       $ObjectCapture = @()
       $null = Get-RSJob | Remove-RSJob | Out-Null
-      $ControlServer = $Script:ControlServer
-      $ControlAPIKey = $Script:ControlAPIKey
-      $ControlAPICredentials = $Script:ControlAPICredentials
+      $ControlServer = $global:ControlServer
+      $ControlAPIKey = $global:ControlAPIKey
+      $ControlAPICredentials = $global:ControlAPICredentials
       $ConnectOptions=$Null
    }
 
