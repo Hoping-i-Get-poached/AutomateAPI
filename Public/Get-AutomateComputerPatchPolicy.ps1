@@ -1,9 +1,10 @@
 function Get-AutomateComputerPatchPolicy {
     [CmdletBinding()]
     param (
-        # ComputerID of the devices(s) in question
+        # ComputerID of the devices(s) in question (max count 64)
         [Parameter(ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
+        [ValidateCount(1,64)]
         [Alias('id')]
         [int[]]
         $ComputerID
